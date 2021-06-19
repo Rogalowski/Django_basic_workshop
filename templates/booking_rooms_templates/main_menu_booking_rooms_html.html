@@ -6,19 +6,43 @@
 </head>
 <body>
 <h1>MAIN MENU BOOKING ROOMS</h1>
-<h3>LIST OF ALL ROOMS:</h3>
+<h3>{{ current_date }} LIST OF ALL ROOMS:</h3>
 
 {% for room in rooms %}
-    <p>{{ room.id }} Room name: <b>{{ room.name }}</b> Room capacity: <b>{{ room.capacity }}</b> Include Projector: <b>{{ room.projector }}</b> Reserved:
+    <p>{{ room.id }} Room name: <b>{{ room.name }}</b> Room capacity: <b>{{ room.capacity }}</b> Include Projector: <b>{{ room.projector }}</b>
+
+
+
+        Today Reserved:
+        {% for bookedroom in bookedrooms %}
+        {% if current_date == bookedroom.date   %} Yes  {% endif %}
+        {% endfor %}
+{#     {% if room.reserved %}#}
+{#       Yes#}
+{#      {% else %}#}
+{#           No#}
+{#      {% endif %}#}
+
+
+
+        {% for bookedroom in bookedrooms %}
+            {% if room.id == bookedroom.room_id_id %}
+        <br> <b>At: </b> {{ bookedroom.date }}   <b>Comment:</b>  {{ bookedroom.comment }}
+
+            {% endif %}
+        {% endfor %}
+
        <br> <b><a href="http://127.0.0.1:8000/room/modify/{{room.id}}">Edit Room</a></b>   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><a href="http://127.0.0.1:8000/room/delete/{{room.id}}"> Delete Room</a></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><a href="http://127.0.0.1:8000/room/reserve/{{room.id}}"> Book this room</a></b>
             </p>
 {% endfor %}
 
 
+
+
 <h3><a href="http://127.0.0.1:8000/room/new"> ADD NEW ROOM </a> </h3>
 
 
-{% if messages %}``
+{% if messages %}
 <h2 class="messages">
     {% for message in messages %}
  {{ message }}

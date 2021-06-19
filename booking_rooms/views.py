@@ -15,9 +15,16 @@ from booking_rooms.models import Room, RoomBooking
 class MainMenu(View):
     def get(self, request):
         rooms = Room.objects.all()
-        #bookrooms = RoomBooking.objects.all()
+        bookedrooms = RoomBooking.objects.all().order_by('date')
+        #bookedrooms = RoomBooking.objects.filter(room_id)
+        current_date = str(datetime.today().strftime('%B %d, %Y'))
 
-        return render(request, 'booking_rooms_templates/main_menu_booking_rooms_html.html', context={'rooms': rooms})
+        # for room in rooms:
+        #     reservation_dates = [bookedrooms.date for bookedrooms in room.roombooking_set.all()]
+        #     room.reserved = datetime.today() in reservation_dates
+
+        return render(request, 'booking_rooms_templates/main_menu_booking_rooms_html.html',
+                      context={'rooms': rooms, 'bookedrooms': bookedrooms, 'current_date': current_date})
 
 
 
@@ -134,7 +141,7 @@ class BookRoom(View):
 
     def post(self, request, room_id):
         room = Room.objects.get(id=room_id)
-        #room = RoomBooking.objects.get(id=room_id)
+
 
 
         room_book_date = request.POST.get('room_book_date')
