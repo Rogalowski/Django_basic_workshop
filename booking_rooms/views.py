@@ -32,12 +32,9 @@ class AddRoom(View):
         room_projector = request.POST.get('room_projector')
 
         #ROOM VALIDATE IS EXIST IN DATABASE
-        # name_room_is_exist = Room.objects.get(name__iexact=room_name)
-        # print(name_room_is_exist)
-        # if room_name == name_room_is_exist:
-        #     error_name = "That room is exist {name_room_is_exist}"
-        #     return render(request, 'booking_rooms_templates/add_room_html.html', context={'error_name': error_name})
-
+        if Room.objects.filter(name=room_name).first():
+            error_name = f"That room exist: {room_name}"
+            return render(request, 'booking_rooms_templates/add_room_html.html', context={'error_name': error_name})
 
         #ROOM FILL NAME/CAPACITY VALIDATION
         if room_name == '' or room_capacity == '':
@@ -94,6 +91,10 @@ class ModifyRoom(View):
         #ROOM FILL NAME/CAPACITY VALIDATION
         if room_name == '' or room_capacity == '':
             error_name = "No provided name or/and capacity, please try again"
+            return render(request, 'booking_rooms_templates/modify_room_html.html', context={'error_name': error_name})
+        # ROOM VALIDATE IS EXIST IN DATABASE
+        if Room.objects.filter(name=room_name).first():
+            error_name = f"That room exist: {room_name}, provide another"
             return render(request, 'booking_rooms_templates/modify_room_html.html', context={'error_name': error_name})
 
         #SET PROJECTOR: FALSE TRUE BY CHECKBOX TYPE 'ON' 'OFF'
