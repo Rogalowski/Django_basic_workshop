@@ -17,14 +17,14 @@
             Comment: <input type="text" name="comment">
         </label>
 
-
-
-
     <input type="submit" value="Book Room">
         </form>
 
 <h3>{{ error_date }}</h3>
-{#<h3>{{ error_capacity }}</h3>#}
+
+{% for bookedroom in bookedrooms %}
+    <b> Date of reservation:</b>  {{ bookedroom.date  }}<b>  Comment:</b> {{ bookedroom.comment }} <br>
+{% endfor %}
 
 </body>
 </html>

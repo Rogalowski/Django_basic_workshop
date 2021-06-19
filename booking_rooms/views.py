@@ -15,7 +15,7 @@ from booking_rooms.models import Room, RoomBooking
 class MainMenu(View):
     def get(self, request):
         rooms = Room.objects.all()
-        bookrooms = RoomBooking.objects.all()
+        #bookrooms = RoomBooking.objects.all()
 
         return render(request, 'booking_rooms_templates/main_menu_booking_rooms_html.html', context={'rooms': rooms})
 
@@ -125,10 +125,11 @@ class ModifyRoom(View):
 class BookRoom(View):
     def get(self, request, room_id):
         room = Room.objects.get(id=room_id)
+        bookedrooms = RoomBooking.objects.filter(room_id=room_id)
 
 
         return render(request, 'booking_rooms_templates/booking_room_html.html',
-                      context={'room': room})
+                      context={'room': room, 'bookedrooms': bookedrooms})
 
 
     def post(self, request, room_id):
