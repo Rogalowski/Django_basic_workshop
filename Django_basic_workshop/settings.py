@@ -46,6 +46,8 @@ LOCAL_APPS = [
     'booking_rooms',
 ]
 
+INSTALLED_APPS = EXTERNALL_APPS + LOCAL_APPS + CORE_APPS
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
