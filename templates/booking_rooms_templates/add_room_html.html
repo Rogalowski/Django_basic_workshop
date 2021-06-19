@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Room Form</title>
+</head>
+<body>
+<h3>ADD ROOM FORM</h3>
+{#    nazwa sali – tekst,#}
+{#    pojemność sali – liczba,#}
+{#    dostępność rzutnika – checkbox.#}
+    <form action="" method="POST">
+        {% csrf_token %}
+        <label>
+            Name room <input type="text" name="room_name">
+        </label>
+
+        <label>
+            Capacity room: <input type="number" name="room_capacity">
+        </label>
+
+        <label>
+            Available projector: <input type="checkbox" name="room_projector">
+        </label>
+
+
+    <input type="submit" value="Add Room">
+        </form>
+
+<h3>{{ error_name }}</h3>
+<h3>{{ error_capacity }}</h3>
+
+
+
+</body>
+</html>

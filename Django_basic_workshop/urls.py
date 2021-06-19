@@ -16,6 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+#APPLICTIONS
+from booking_rooms.views import AddRoom, MainMenu
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('room/new',  AddRoom.as_view()),
+    path('main-menu-rooms', MainMenu.as_view())
+    #path('temperature_class/', TemperatureClass.as_view()),
 ]
