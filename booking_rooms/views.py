@@ -1,9 +1,13 @@
+from datetime import datetime
+
+from django.contrib import messages
+
 from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.views import View
 
-from booking_rooms.models import Room
+from booking_rooms.models import Room, RoomBooking
 
 
 #MAIN MENU ROOM
@@ -11,6 +15,7 @@ from booking_rooms.models import Room
 class MainMenu(View):
     def get(self, request):
         rooms = Room.objects.all()
+        bookrooms = RoomBooking.objects.all()
 
         return render(request, 'booking_rooms_templates/main_menu_booking_rooms_html.html', context={'rooms': rooms})
 
@@ -54,8 +59,9 @@ class AddRoom(View):
             return render(request, 'booking_rooms_templates/add_room_html.html', context={'error_name': error_capacity})
 
         #ROOM ADD TO DATABASE
-        room = Room(name=room_name, capacity=room_capacity, projector=room_projector)
-        room.save()
+        Room.objects.create(name=room_name, capacity=room_capacity, projector=room_projector)
+        #room = Room(name=room_name, capacity=room_capacity, projector=room_projector)
+        #room.save()
 
         return redirect('/main-menu-rooms')
 
@@ -71,8 +77,10 @@ class DeleteRoom(View):
 
         room_del.delete()
 
-        #time.sleep(5)
-        return render(request, 'booking_rooms_templates/main_menu_booking_rooms_html.html', context={'html_response_delete_room': html_response_delete_room, 'rooms': rooms})
+
+        messages.add_message(request, messages.INFO, f'Room {room_del.name} has been deleted')
+        return redirect('/main-menu-rooms')
+        #return render(request, 'booking_rooms_templates/main_menu_booking_rooms_html.html', context={'html_response_delete_room': html_response_delete_room, 'rooms': rooms})
 
 class ModifyRoom(View):
     def get(self, request, room_id):
@@ -111,5 +119,40 @@ class ModifyRoom(View):
         #ROOM MODIFY BY ROOM_ID TO DATABASE
         room = Room(id=room_id, name=room_name, capacity=room_capacity, projector=room_projector)
         room.save()
+
+        return redirect('/main-menu-rooms')
+
+class BookRoom(View):
+    def get(self, request, room_id):
+        room = Room.objects.get(id=room_id)
+
+
+        return render(request, 'booking_rooms_templates/booking_room_html.html',
+                      context={'room': room})
+
+
+    def post(self, request, room_id):
+        room = Room.objects.get(id=room_id)
+        #room = RoomBooking.objects.get(id=room_id)
+
+
+        room_book_date = request.POST.get('room_book_date')
+        comment = request.POST.get('comment')
+
+
+        if room_book_date < str(datetime.today()):
+
+            error_date = "Wrong data - from past, please try again"
+            return render(request, 'booking_rooms_templates/booking_room_html.html',
+                          context={'room': room, 'error_date': error_date})
+
+
+        if RoomBooking.objects.filter(room_id_id=room, date=room_book_date):
+            error_date = "Room already booked this date, please try again"
+            return render(request, 'booking_rooms_templates/booking_room_html.html',
+                          context={'room': room, 'error_date': error_date})
+
+
+        RoomBooking.objects.create(room_id_id=room_id, date=room_book_date, comment=comment)
 
         return redirect('/main-menu-rooms')

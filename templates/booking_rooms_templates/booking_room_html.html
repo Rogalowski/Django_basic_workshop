@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Booking Room</title>
+</head>
+<body>
+<h1>Reservation of Room: {{ room.id }} Name: {{ room.name }} Capacity: {{ room.capacity }} Projector: {{ room.projector }} </h1>
+
+<form action="" method="POST">
+        {% csrf_token %}
+        <label>
+            Date of booking room <input type="date" name="room_book_date">
+        </label>
+
+        <label>
+            Comment: <input type="text" name="comment">
+        </label>
+
+
+
+
+    <input type="submit" value="Book Room">
+        </form>
+
+<h3>{{ error_date }}</h3>
+{#<h3>{{ error_capacity }}</h3>#}
+
+</body>
+</html>

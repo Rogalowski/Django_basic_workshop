@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 
 #APPLICTIONS
-from booking_rooms.views import AddRoom, MainMenu, DeleteRoom, ModifyRoom
+from booking_rooms.views import AddRoom, MainMenu, DeleteRoom, ModifyRoom, BookRoom
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,6 +25,7 @@ urlpatterns = [
     path('main-menu-rooms', MainMenu.as_view()),
     path('room/new',  AddRoom.as_view()),
     path('room/delete/<int:room_id>', DeleteRoom.as_view()),
-    path('room/modify/<int:room_id>', ModifyRoom.as_view())
-    #path('temperature_class/', TemperatureClass.as_view()),
+    path('room/modify/<int:room_id>', ModifyRoom.as_view()),
+    path('room/reserve/<int:room_id>', BookRoom.as_view())
+
 ]
