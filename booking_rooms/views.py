@@ -7,9 +7,14 @@ from booking_rooms.models import Room
 
 
 #MAIN MENU ROOM
+#VIEW ROOMS
 class MainMenu(View):
     def get(self, request):
-        return render(request, 'booking_rooms_templates/main_menu_booking_rooms_html.html')
+        rooms = Room.objects.all()
+
+        return render(request, 'booking_rooms_templates/main_menu_booking_rooms_html.html', context={'rooms': rooms})
+
+
 
 #ADDING NEW ROOMS FORM INTO DATABASE
 class AddRoom(View):
@@ -18,11 +23,7 @@ class AddRoom(View):
         #ADD ROOM FORM
         return render(request, 'booking_rooms_templates/add_room_html.html')
 
-    #sprawdzić, czy nazwa sali, nie jest pusta,#}
-    #sprawdzić, czy sala o podanej nazwie, nie istnieje już w bazie danych,#}
-    #sprawdzić, czy pojemność sali jest liczbą dodatnią;#}
-    #jeśli dane są poprawne, zapisać nową salę do bazy i przekierować użytkownika na stronę główną,#}
-    #jeśli są niepoprawne, powinien wyświetlić użytkownikowi odpowiedni komunikat.#}
+
 
     def post(self, request):
 
@@ -30,11 +31,19 @@ class AddRoom(View):
         room_capacity = request.POST.get('room_capacity')
         room_projector = request.POST.get('room_projector')
 
+        #ROOM VALIDATE IS EXIST IN DATABASE
+        # name_room_is_exist = Room.objects.get(name__iexact=room_name)
+        # print(name_room_is_exist)
+        # if room_name == name_room_is_exist:
+        #     error_name = "That room is exist {name_room_is_exist}"
+        #     return render(request, 'booking_rooms_templates/add_room_html.html', context={'error_name': error_name})
 
-        #ROOM NAME VALIDATION
+
+        #ROOM FILL NAME/CAPACITY VALIDATION
         if room_name == '' or room_capacity == '':
             error_name = "No provided name or/and capacity, please try again"
             return render(request, 'booking_rooms_templates/add_room_html.html', context={'error_name': error_name})
+
 
         #SET PROJECTOR: FALSE TRUE BY CHECKBOX TYPE 'ON' 'OFF'
         if room_projector == 'on':
@@ -42,23 +51,64 @@ class AddRoom(View):
         else:
             room_projector = False
 
+        #ROOM CAPACITY VALIDATION
         if int(room_capacity) <= 0:
             error_capacity = "Wrong capacity number (only integer and greater than 0, please try again"
             return render(request, 'booking_rooms_templates/add_room_html.html', context={'error_name': error_capacity})
 
-        #room = Room.objects.all()
+        #ROOM ADD TO DATABASE
         room = Room(name=room_name, capacity=room_capacity, projector=room_projector)
         room.save()
 
         return redirect('/main-menu-rooms')
 
-        # convertionType = request.POST.get('convertionType')
-        # if convertionType == 'celcToFahr':
-        #     celcToFahr = int(request.POST.get('degrees'))
-        #     celc = f'Temperatura: {(celcToFahr - 32) / 2}'
-        #     return render(request, 'temperature_class.html', context={'celc': celc})
-        #
-        # if convertionType == 'FahrToCelc':
-        #     FahrToCelc = int(request.POST.get('degrees'))
-        #     fahr = f'Fahrenheit: {FahrToCelc * 2 + 32}'
-        #     return render(request, 'temperature_class.html', context={'fahr': fahr})
+
+#DELETE ROOM
+class DeleteRoom(View):
+    def get(self, request, room_id):
+
+        room_del = Room.objects.get(id=room_id)
+
+        rooms = Room.objects.all()
+        html_response_delete_room = f"Room {room_del.id} - {room_del.name} has   been deleted from database"
+
+        room_del.delete()
+
+        #time.sleep(5)
+        return render(request, 'booking_rooms_templates/main_menu_booking_rooms_html.html', context={'html_response_delete_room': html_response_delete_room, 'rooms': rooms})
+
+class ModifyRoom(View):
+    def get(self, request, room_id):
+        room_mod = Room.objects.get(id=room_id)
+
+
+        return render(request, 'booking_rooms_templates/modify_room_html.html', context={'room_mod': room_mod})
+
+    def post(self, request, room_id):
+
+        room_name = request.POST.get('room_name')
+        room_capacity = request.POST.get('room_capacity')
+        room_projector = request.POST.get('room_projector')
+
+
+        #ROOM FILL NAME/CAPACITY VALIDATION
+        if room_name == '' or room_capacity == '':
+            error_name = "No provided name or/and capacity, please try again"
+            return render(request, 'booking_rooms_templates/modify_room_html.html', context={'error_name': error_name})
+
+        #SET PROJECTOR: FALSE TRUE BY CHECKBOX TYPE 'ON' 'OFF'
+        if room_projector == 'on':
+            room_projector = True
+        else:
+            room_projector = False
+
+        #ROOM CAPACITY VALIDATION
+        if int(room_capacity) <= 0:
+            error_capacity = "Wrong capacity number (only integer and greater than 0, please try again"
+            return render(request, 'booking_rooms_templates/modify_room_html.html', context={'error_name': error_capacity})
+
+        #ROOM MODIFY BY ROOM_ID TO DATABASE
+        room = Room(id=room_id, name=room_name, capacity=room_capacity, projector=room_projector)
+        room.save()
+
+        return redirect('/main-menu-rooms')

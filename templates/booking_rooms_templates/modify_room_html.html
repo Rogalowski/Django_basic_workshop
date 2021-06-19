@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modify Room</title>
+</head>
+<body>
+<h1>You request modify: {{ room_mod.id }} Name: {{ room_mod.name }} Capacity: {{ room_mod.capacity }} Projector: {{ room_mod.projector }} </h1>
+
+<form action="" method="POST">
+        {% csrf_token %}
+        <label>
+            Name room <input type="text" name="room_name">
+        </label>
+
+        <label>
+            Capacity room: <input type="number" name="room_capacity">
+        </label>
+
+        <label>
+            Available projector: <input type="checkbox" name="room_projector">
+        </label>
+
+
+    <input type="submit" value="Add Room">
+        </form>
+
+<h3>{{ error_name }}</h3>
+<h3>{{ error_capacity }}</h3>
+
+</body>
+</html>

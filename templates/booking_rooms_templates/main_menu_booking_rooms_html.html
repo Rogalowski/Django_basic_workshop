@@ -6,11 +6,17 @@
 </head>
 <body>
 <h1>MAIN MENU BOOKING ROOMS</h1>
+<h3>LIST OF ALL ROOMS:</h3>
 
-<h3>LIST OF ALL ROOMS</h3>
+{% for room in rooms %}
+    <p>{{ room.id }} Room name: <b>{{ room.name }}</b> Room capacity: <b>{{ room.capacity }}</b> Include Projector: <b>{{ room.projector }}</b> Reserved:
+       <br> <b>Reserve Room</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><a href="http://127.0.0.1:8000/room/modify/{{room.id}}">Edit Room</a></b>   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><a href="http://127.0.0.1:8000/room/delete/{{room.id}}"> Delete Room</a></b> </p>
+{% endfor %}
+
+
 <h3><a href="http://127.0.0.1:8000/room/new"> ADD NEW ROOM </a> </h3>
 
-
+<p><h3><br> {{ html_response_delete_room }}</h3></p>
 <footer>
 		Autor: <address>Jacek Rogowski (rogalowski@gmail.com)</address>
 		<p>All rights reserved</p>
