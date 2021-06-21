@@ -78,16 +78,11 @@ class DeleteRoom(View):
     def get(self, request, room_id):
 
         room_del = Room.objects.get(id=room_id)
-
-        rooms = Room.objects.all()
-        html_response_delete_room = f"Room {room_del.id} - {room_del.name} has   been deleted from database"
-
         room_del.delete()
 
-
+        #MESSAGE AFTER DELETE ROOM FROM DATABASE IN MAIN MENU
         messages.add_message(request, messages.INFO, f'Room {room_del.name} has been deleted')
         return redirect('/main-menu-rooms')
-        #return render(request, 'booking_rooms_templates/main_menu_booking_rooms_html.html', context={'html_response_delete_room': html_response_delete_room, 'rooms': rooms})
 
 class ModifyRoom(View):
     def get(self, request, room_id):
@@ -140,16 +135,13 @@ class BookRoom(View):
 
 
     def post(self, request, room_id):
+
         room = Room.objects.get(id=room_id)
-
-
 
         room_book_date = request.POST.get('room_book_date')
         comment = request.POST.get('comment')
 
-
         if room_book_date < str(datetime.today()):
-
             error_date = "Wrong data - from past, please try again"
             return render(request, 'booking_rooms_templates/booking_room_html.html',
                           context={'room': room, 'error_date': error_date})
@@ -164,3 +156,38 @@ class BookRoom(View):
         RoomBooking.objects.create(room_id_id=room_id, date=room_book_date, comment=comment)
 
         return redirect('/main-menu-rooms')
+
+
+class Search(View):
+    def get(self, request):
+
+
+        current_date = str(datetime.today().strftime('%B %d, %Y'))
+
+        rooms = Room.objects.all()
+
+
+        room_name = request.GET.get('room_name')
+        room_capacity = request.GET.get('room_capacity')
+        room_projector = request.GET.get('room_projector')
+
+        # SET PROJECTOR: FALSE or TRUE BY CHECKBOX TYPE 'ON' 'OFF'
+        if room_projector == 'on':
+            room_projector = True
+        else:
+            room_projector = False
+
+
+        if room_capacity == '':
+            room_capacity = 0
+
+        #QUERY FILTERS BY NAME CAPACITY PROJECTOR AVAILABLE
+        rooms = rooms.filter(name__icontains=room_name)
+        rooms = rooms.filter(capacity__gt=room_capacity)
+        rooms = rooms.filter(projector=room_projector)
+
+        bookedrooms = RoomBooking.objects.all().order_by('date')
+
+
+        return render(request, 'booking_rooms_templates/main_menu_booking_rooms_html.html',
+                      context={'rooms': rooms, 'bookedrooms': bookedrooms, 'current_date': current_date})

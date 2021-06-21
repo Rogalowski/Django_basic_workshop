@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search Room</title>
+</head>
+<body>
+
+
+
+
+{% for room in rooms %}
+    <p>{{ room.id }} Room name: <b>{{ room.name }}</b> Room capacity: <b>{{ room.capacity }}</b> Include Projector: <b>{{ room.projector }}</b>
+{% endfor %}
+
+
+
+
+
+
+
+</body>
+</html>

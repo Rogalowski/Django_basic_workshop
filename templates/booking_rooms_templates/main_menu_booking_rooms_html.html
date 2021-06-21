@@ -5,8 +5,28 @@
     <title>Main Menu of Booking rooms</title>
 </head>
 <body>
-<h1>MAIN MENU BOOKING ROOMS</h1>
-<h3>{{ current_date }} LIST OF ALL ROOMS:</h3>
+<h1><a href="http://127.0.0.1:8000/main-menu-rooms">MAIN MENU BOOKING ROOMS</a> {{ current_date }}</h1>
+
+<h3>QUERY SEARCH AVAILABLE ROOM:</h3>
+
+<form action="/search" method="GET">
+        {% csrf_token %}
+        <label>
+            Name of room: <input type="text" name="room_name">
+        </label>
+
+        <label>
+            Minimal needed capacity room: <input type="number" name="room_capacity">
+        </label>
+
+        <label>
+            Needed projector: <input type="checkbox" name="room_projector">
+        </label>
+
+    <input type="submit" value="Search">
+        </form>
+
+<h3>LIST OF ALL ROOMS:</h3>
 
 {% for room in rooms %}
     <p>{{ room.id }} Room name: <b>{{ room.name }}</b> Room capacity: <b>{{ room.capacity }}</b> Include Projector: <b>{{ room.projector }}</b>
@@ -14,14 +34,9 @@
 
 
         Today Reserved:
-        {% for bookedroom in bookedrooms %}
-        {% if current_date == bookedroom.date   %} Yes  {% endif %}
+        {% for bookedroom in bookedrooms.date %}
+        {% if current_date <= bookedroom.date   %} No  {% endif %}
         {% endfor %}
-{#     {% if room.reserved %}#}
-{#       Yes#}
-{#      {% else %}#}
-{#           No#}
-{#      {% endif %}#}
 
 
 
@@ -41,14 +56,15 @@
 
 <h3><a href="http://127.0.0.1:8000/room/new"> ADD NEW ROOM </a> </h3>
 
-
+{#MESSAGE AFTER DELETE ROOM FROM DATABASE IN MAIN MENU#}
 {% if messages %}
 <h2 class="messages">
-    {% for message in messages %}
- {{ message }}
-    {% endfor %}
+    {% for message in messages %}  {{ message }}   {% endfor %}
 </h2>
 {% endif %}
+
+
+
 <footer>
 		Autor: <address>Jacek Rogowski (rogalowski@gmail.com)</address>
 		<p>All rights reserved</p>
