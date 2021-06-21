@@ -41,15 +41,12 @@
         <br> <b> At: </b> {{ bookedroom.date }}   <b>Comment:</b>  {{ bookedroom.comment }}
 
             {% endif %}
-        {% endfor %}
-
-<br>
-    Today Reserved:
-        {% for bookedroom in bookedrooms %}
-        {% if current_date == bookedroom.date and room.id == bookedroom.room_id_id    %} <b>Yes</b>
-        {% elif room.id == bookedroom.room_id_id    %} <b>No</b>
+             {% if current_date == bookedroom.date and room.id == bookedroom.room_id_id    %} <b>Reserved Today: </b>Yes
+        {% elif room.id == bookedroom.room_id_id    %} <b>Reserved Today: </b> No
         {% endif %}
         {% endfor %}
+
+
 
        <br> <b><a href="http://127.0.0.1:8000/room/modify/{{room.id}}">Edit Room</a></b>   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><a href="http://127.0.0.1:8000/room/delete/{{room.id}}"> Delete Room</a></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><a href="http://127.0.0.1:8000/room/reserve/{{room.id}}"> Book this room</a></b>
             </p>
