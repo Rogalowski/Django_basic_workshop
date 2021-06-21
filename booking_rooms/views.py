@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date
 
 from django.contrib import messages
 
@@ -16,12 +16,16 @@ class MainMenu(View):
     def get(self, request):
         rooms = Room.objects.all()
         bookedrooms = RoomBooking.objects.all().order_by('date')
-        #bookedrooms = RoomBooking.objects.filter(room_id)
-        current_date = str(datetime.today().strftime('%B %d, %Y'))
 
+        current_date = date.today()
+        # current_date = datetime.date.today()
         # for room in rooms:
-        #     reservation_dates = [bookedrooms.date for bookedrooms in room.roombooking_set.all()]
-        #     room.reserved = datetime.today() in reservation_dates
+        #     for bookedroom in bookedrooms:
+        #         if current_date == bookedroom.date and room.id == bookedroom.room_id_id:
+        #             available = 'Yes'
+        #         else:
+        #             available = 'No'
+
 
         return render(request, 'booking_rooms_templates/main_menu_booking_rooms_html.html',
                       context={'rooms': rooms, 'bookedrooms': bookedrooms, 'current_date': current_date})
@@ -182,6 +186,7 @@ class Search(View):
             room_capacity = 0
 
         #QUERY FILTERS BY NAME CAPACITY PROJECTOR AVAILABLE
+        #icontains checking by upper and lower cases
         rooms = rooms.filter(name__icontains=room_name)
         rooms = rooms.filter(capacity__gt=room_capacity)
         rooms = rooms.filter(projector=room_projector)

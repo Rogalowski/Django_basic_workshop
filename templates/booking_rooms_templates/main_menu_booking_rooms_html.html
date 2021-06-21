@@ -31,20 +31,24 @@
 {% for room in rooms %}
     <p>{{ room.id }} Room name: <b>{{ room.name }}</b> Room capacity: <b>{{ room.capacity }}</b> Include Projector: <b>{{ room.projector }}</b>
 
+{#Today Reserved: {{ available }}#}
 
-
-        Today Reserved:
-        {% for bookedroom in bookedrooms.date %}
-        {% if current_date <= bookedroom.date   %} No  {% endif %}
-        {% endfor %}
 
 
 
         {% for bookedroom in bookedrooms %}
             {% if room.id == bookedroom.room_id_id %}
-        <br> <b>At: </b> {{ bookedroom.date }}   <b>Comment:</b>  {{ bookedroom.comment }}
+        <br> <b> At: </b> {{ bookedroom.date }}   <b>Comment:</b>  {{ bookedroom.comment }}
 
             {% endif %}
+        {% endfor %}
+
+<br>
+    Today Reserved:
+        {% for bookedroom in bookedrooms %}
+        {% if current_date == bookedroom.date and room.id == bookedroom.room_id_id    %} <b>Yes</b>
+        {% elif room.id == bookedroom.room_id_id    %} <b>No</b>
+        {% endif %}
         {% endfor %}
 
        <br> <b><a href="http://127.0.0.1:8000/room/modify/{{room.id}}">Edit Room</a></b>   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><a href="http://127.0.0.1:8000/room/delete/{{room.id}}"> Delete Room</a></b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b><a href="http://127.0.0.1:8000/room/reserve/{{room.id}}"> Book this room</a></b>
