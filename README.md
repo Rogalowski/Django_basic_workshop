@@ -20,5 +20,10 @@
 
 <h1 align="center"> Django_room_booking_workshop </h1>
 
- 
+
 Django project that allows book conference rooms - workshop exercise coderslab
+
+<h1 align="center"> SCRUM LAB PROJECT</h1>
+
+
+Django Scrum Lab project in ScrumLab folder. Allows us to make reservations of food. Colaboration with other coderslab mates.
