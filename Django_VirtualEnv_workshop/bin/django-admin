@@ -1,4 +1,4 @@
-#!/home/jacek/MegaSync/Programowanie/Django_basic_workshop/Django_VirtualEnv_workshop/bin/python
+#!/home/jacek/MegaSync/Programowanie/Django_basic_workshop/Django_VirtualEnv_workshop/bin/python3.8
 # -*- coding: utf-8 -*-
 import re
 import sys
